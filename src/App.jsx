@@ -51,7 +51,11 @@ function App() {
       <header className="navbar">
         <div className="container navbar-flex">
           <a href="#" className="logo" onClick={(e) => { e.preventDefault(); setActiveTab('landing'); closeMobileMenu(); }}>
-            MATPLUS<span>ACCOUNTING</span>
+            <img 
+              src="/matplus-logo.png" 
+              alt="MATPLUS+ Chartered Accountants" 
+              style={{ height: '52px', width: 'auto', objectFit: 'contain', display: 'block' }} 
+            />
           </a>
 
           {/* Desktop Navigation */}
@@ -168,7 +172,9 @@ function App() {
         <div className="container">
           <div className="footer-top-grid">
             <div>
-              <h3 style={{ color: 'white', marginBottom: '1.25rem', fontSize: '1.4rem' }}>MATPLUS<span style={{ color: 'var(--color-primary)' }}>ACCOUNTING</span></h3>
+              <div style={{ display: 'inline-block', background: 'white', borderRadius: '10px', padding: '8px 14px', marginBottom: '1.25rem' }}>
+                <img src="/matplus-logo.png" alt="MATPLUS+ Chartered Accountants" style={{ height: '50px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+              </div>
               <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                 Providing smart financial solutions, proactive tax advice, and business structures for clients across Australia.
               </p>
