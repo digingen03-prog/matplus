@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
-import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
+import { FiPhone, FiMail, FiMapPin, FiMenu, FiX } from 'react-icons/fi';
 import { FaLinkedin, FaFacebook, FaTwitter } from 'react-icons/fa';
 
 const BACKEND_URL = 'http://localhost:5000/api/leads';
@@ -10,6 +10,9 @@ function App() {
   const [activeTab, setActiveTab] = useState('landing');
   const [layoutModel, setLayoutModel] = useState('model1');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const handleConsultationClick = (e) => {
     e.preventDefault();
@@ -47,65 +50,47 @@ function App() {
       {/* 2. MAIN NAVIGATION HEADER */}
       <header className="navbar">
         <div className="container navbar-flex">
-          <a href="#" className="logo" onClick={(e) => { e.preventDefault(); setActiveTab('landing'); }}>
+          <a href="#" className="logo" onClick={(e) => { e.preventDefault(); setActiveTab('landing'); closeMobileMenu(); }}>
             MATPLUS<span>ACCOUNTING</span>
           </a>
-          
-          <nav>
-            <ul className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', listStyle: 'none' }}>
+
+          {/* Desktop Navigation */}
+          <nav className="desktop-nav">
+            <ul className="nav-links">
               <li 
                 className={`nav-item ${activeTab === 'landing' ? 'active' : ''}`}
                 onClick={() => setActiveTab('landing')}
-                style={{ cursor: 'pointer', fontWeight: 600 }}
               >
                 Home
               </li>
-              <li className="nav-item" onClick={handleConsultationClick} style={{ cursor: 'pointer', fontWeight: 600 }}>Services</li>
-              <li className="nav-item" onClick={handleConsultationClick} style={{ cursor: 'pointer', fontWeight: 600 }}>Industries</li>
-              <li className="nav-item" onClick={handleConsultationClick} style={{ cursor: 'pointer', fontWeight: 600 }}>About Us</li>
+              <li className="nav-item" onClick={handleConsultationClick}>Services</li>
+              <li className="nav-item" onClick={handleConsultationClick}>Industries</li>
+              <li className="nav-item" onClick={handleConsultationClick}>About Us</li>
               
               {/* Layout Dropdown trigger */}
-              <li className="nav-item dropdown-layouts" style={{ position: 'relative' }}>
+              <li className="nav-item dropdown-layouts">
                 <div 
-                  className="dropdown-trigger" 
-                  style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', cursor: 'pointer', fontWeight: 600 }}
+                  className="dropdown-trigger"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
                   Layouts <span style={{ fontSize: '0.65rem' }}>▼</span>
                 </div>
                 {isDropdownOpen && (
-                  <ul className="dropdown-menu" style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: 'white',
-                    border: '1px solid #cbd5e1',
-                    borderRadius: '8px',
-                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
-                    listStyle: 'none',
-                    padding: '0.5rem 0',
-                    minWidth: '200px',
-                    zIndex: 100,
-                    marginTop: '0.5rem'
-                  }}>
+                  <ul className="dropdown-menu">
                     <li 
-                      className="dropdown-item" 
-                      style={{ padding: '0.6rem 1.2rem', cursor: 'pointer', fontSize: '0.85rem', color: layoutModel === 'model1' ? 'var(--color-primary)' : '#334155', background: layoutModel === 'model1' ? '#f1f5f9' : 'transparent', fontWeight: layoutModel === 'model1' ? 700 : 500 }}
+                      className={`dropdown-item ${layoutModel === 'model1' ? 'active-model' : ''}`}
                       onClick={() => { setLayoutModel('model1'); setIsDropdownOpen(false); }}
                     >
                       Model 1 - Frost Glass
                     </li>
                     <li 
-                      className="dropdown-item" 
-                      style={{ padding: '0.6rem 1.2rem', cursor: 'pointer', fontSize: '0.85rem', color: layoutModel === 'model2' ? '#F4B400' : '#334155', background: layoutModel === 'model2' ? '#fdfdf6' : 'transparent', fontWeight: layoutModel === 'model2' ? 700 : 500 }}
+                      className={`dropdown-item ${layoutModel === 'model2' ? 'active-model' : ''}`}
                       onClick={() => { setLayoutModel('model2'); setIsDropdownOpen(false); }}
                     >
                       Model 2 - Golden Premium
                     </li>
                     <li 
-                      className="dropdown-item" 
-                      style={{ padding: '0.6rem 1.2rem', cursor: 'pointer', fontSize: '0.85rem', color: layoutModel === 'model3' ? '#2563EB' : '#334155', background: layoutModel === 'model3' ? '#f0f7ff' : 'transparent', fontWeight: layoutModel === 'model3' ? 700 : 500 }}
+                      className={`dropdown-item ${layoutModel === 'model3' ? 'active-model' : ''}`}
                       onClick={() => { setLayoutModel('model3'); setIsDropdownOpen(false); }}
                     >
                       Model 3 - Ocean Blue
@@ -117,16 +102,50 @@ function App() {
               <li>
                 <a 
                   href="#join-form" 
-                  className="btn btn-primary" 
+                  className="btn btn-primary navbar-cta-btn"
                   onClick={handleConsultationClick}
-                  style={{ padding: '0.55rem 1.15rem', fontSize: '0.85rem' }}
                 >
                   Book a Free Consultation
                 </a>
               </li>
             </ul>
           </nav>
+
+          {/* Hamburger Button (Mobile Only) */}
+          <button 
+            className="mobile-menu-toggle"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle navigation"
+          >
+            {isMobileMenuOpen ? <FiX /> : <FiMenu />}
+          </button>
         </div>
+
+        {/* Mobile Slide-Down Navigation */}
+        {isMobileMenuOpen && (
+          <div className="mobile-nav-overlay">
+            <ul className="mobile-nav-links">
+              <li className={`mobile-nav-item ${activeTab === 'landing' ? 'active' : ''}`} onClick={() => { setActiveTab('landing'); closeMobileMenu(); }}>Home</li>
+              <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>Services</li>
+              <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>Industries</li>
+              <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>About Us</li>
+              <li className="mobile-nav-item mobile-nav-divider">Layouts</li>
+              <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model1' ? 'active' : ''}`} onClick={() => { setLayoutModel('model1'); closeMobileMenu(); }}>⬛ Model 1 - Frost Glass</li>
+              <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model2' ? 'active' : ''}`} onClick={() => { setLayoutModel('model2'); closeMobileMenu(); }}>🏅 Model 2 - Golden Premium</li>
+              <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model3' ? 'active' : ''}`} onClick={() => { setLayoutModel('model3'); closeMobileMenu(); }}>🌊 Model 3 - Ocean Blue</li>
+              <li style={{ padding: '0.75rem 1.5rem' }}>
+                <a 
+                  href="#join-form" 
+                  className="btn btn-primary" 
+                  style={{ width: '100%', textAlign: 'center', display: 'block' }}
+                  onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}
+                >
+                  Book a Free Consultation
+                </a>
+              </li>
+            </ul>
+          </div>
+        )}
       </header>
 
       {/* 3. DYNAMIC CONTENT AREA */}
@@ -204,7 +223,6 @@ function App() {
             <div style={{ display: 'flex', gap: '1.25rem' }}>
               <a href="#" className="footer-link-a">Privacy Policy</a>
               <a href="#" className="footer-link-a">Terms of Service</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); }} className="footer-link-a" style={{ opacity: 0.5 }}>Admin Login</a>
             </div>
           </div>
         </div>

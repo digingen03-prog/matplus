@@ -945,19 +945,19 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
             <h2 className="section-title">What Our Clients Say</h2>
           </div>
 
-          <div style={styles.testimonialWrapper}>
+          <div className="testimonial-wrapper">
             <button 
+              className="testimonial-nav-btn"
               onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
-              style={styles.navTestimonialBtn}
             >
               ‹
             </button>
             
-            <div key={currentTestimonial} className="benefit-card animate-fade-in testimonial-card" style={{ flexGrow: 1, margin: '0 1.5rem', textAlign: 'center', boxShadow: 'var(--card-shadow)' }}>
+            <div key={currentTestimonial} className="benefit-card animate-fade-in testimonial-card">
               <div style={{ color: '#fbbf24', display: 'flex', justifyContent: 'center', gap: '2px', marginBottom: '1rem', fontSize: '1.2rem' }}>
                 <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
               </div>
-              <p style={{ fontSize: '1.1rem', fontStyle: 'italic', marginBottom: '1.5rem', color: 'var(--color-secondary)', lineHeight: 1.7 }}>
+              <p style={{ fontSize: '1.05rem', fontStyle: 'italic', marginBottom: '1.5rem', color: 'var(--color-secondary)', lineHeight: 1.7 }}>
                 "{testimonials[currentTestimonial].text}"
               </p>
               <div>
@@ -967,8 +967,8 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
             </div>
 
             <button 
+              className="testimonial-nav-btn"
               onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
-              style={styles.navTestimonialBtn}
             >
               ›
             </button>
