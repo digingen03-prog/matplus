@@ -20,6 +20,44 @@ import {
   FiTrendingUp
 } from 'react-icons/fi';
 
+// Reusable Animated Counter component that counts up when triggered
+function AnimatedCounter({ value, duration = 1.8, trigger = false }) {
+  const [count, setCount] = useState('0');
+
+  useEffect(() => {
+    if (!trigger) return;
+
+    const numericStr = value.replace(/[^0-9]/g, '');
+    const target = parseInt(numericStr, 10);
+    if (isNaN(target)) {
+      setCount(value);
+      return;
+    }
+
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
+      const easedProgress = progress * (2 - progress); // Ease out quad
+      const currentVal = Math.floor(easedProgress * target);
+      
+      let displayVal = currentVal.toLocaleString();
+      if (value.includes('+')) displayVal += '+';
+      if (value.includes('%')) displayVal += '%';
+      
+      setCount(displayVal);
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+
+    window.requestAnimationFrame(step);
+  }, [value, duration, trigger]);
+
+  return <span>{count}</span>;
+}
+
 export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }) {
   // 1. Hero Slideshow State
   const slides = [
@@ -182,6 +220,8 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
   const [structure, setStructure] = useState('company');
   const [currentSpend, setCurrentSpend] = useState('5k-15k');
   const [estimatedSavings, setEstimatedSavings] = useState(3200);
+
+  const [statsInView, setStatsInView] = useState(false);
 
   // Calculate savings dynamically
   useEffect(() => {
@@ -472,110 +512,118 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
         </div>
       </section>
 
-      {/* 4. HOW WE WORK (TIMELINE + CHAPTERS) */}
-      <section className="section section-bg timeline-section">
+      {/* 4. HOW WE WORK (UNIFIED WORKFLOW SECTION) */}
+      <section id="workflow-section" className="section section-bg workflow-section" style={{ background: 'var(--bg-section)' }}>
         <div className="container">
           <div className="section-header">
             <span className="section-badge">Workflow</span>
             <h2 className="section-title">A simple process for lasting impact</h2>
-            <p className="section-subtitle">Three clear chapters. One trusted team with you through all of them.</p>
+            <p className="section-subtitle">Three clear steps. One trusted team with you through all of them.</p>
           </div>
 
-          <div className="timeline-grid" style={{ marginBottom: '5rem' }}>
+          <div className="workflow-flex-container">
             {/* Step 1 */}
-            <div className="timeline-step">
-              <div className="timeline-num">01</div>
-              <h3 className="timeline-step-title">Understand Your Goals</h3>
-              <p className="timeline-step-desc">
+            <div className="workflow-rect-card">
+              <span className="workflow-step-num">01</span>
+              <h3 className="workflow-card-title">Understand Your Goals</h3>
+              <span className="workflow-card-badge">For Startups & New Ventures</span>
+              <p className="workflow-card-desc">
                 We sit down to learn about your business structure, cash flow roadblocks, and ultimate financial vision.
               </p>
+              <div className="workflow-card-divider" />
+              <ul className="workflow-bullets">
+                <li>Company Formation & Setups</li>
+                <li>Cloud Accounting & Bookkeeping</li>
+                <li>VAT & Self-Assessment Filings</li>
+              </ul>
+            </div>
+
+            {/* Connector 1 */}
+            <div className="workflow-connector">
+              {/* Horizontal SVG Arrow for desktop */}
+              <svg className="workflow-arrow-horizontal" width="60" height="24" viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M0 12 H54 L46 6 M54 12 L46 18" 
+                  stroke="var(--color-primary)" 
+                  strokeWidth="3" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  strokeDasharray="8 6"
+                  className="animated-arrow-path"
+                />
+              </svg>
+              {/* Vertical SVG Arrow for mobile */}
+              <svg className="workflow-arrow-vertical" width="24" height="60" viewBox="0 0 24 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M12 0 V54 L6 46 M12 54 L18 46" 
+                  stroke="var(--color-primary)" 
+                  strokeWidth="3" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  strokeDasharray="8 6"
+                  className="animated-arrow-path-vertical"
+                />
+              </svg>
             </div>
 
             {/* Step 2 */}
-            <div className="timeline-step">
-              <div className="timeline-num">02</div>
-              <h3 className="timeline-step-title">Craft Smart Solutions</h3>
-              <p className="timeline-step-desc">
+            <div className="workflow-rect-card">
+              <span className="workflow-step-num">02</span>
+              <h3 className="workflow-card-title">Craft Smart Solutions</h3>
+              <span className="workflow-card-badge">For SMEs & Business Owners</span>
+              <p className="workflow-card-desc">
                 Our accountants structure a custom-tailored strategy covering tax, cloud setups, and advisory models.
               </p>
+              <div className="workflow-card-divider" />
+              <ul className="workflow-bullets">
+                <li>Tax Planning & Advisory</li>
+                <li>Payroll & Company Restructuring</li>
+                <li>Business Valuations & Consulting</li>
+              </ul>
+            </div>
+
+            {/* Connector 2 */}
+            <div className="workflow-connector">
+              {/* Horizontal SVG Arrow for desktop */}
+              <svg className="workflow-arrow-horizontal" width="60" height="24" viewBox="0 0 60 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M0 12 H54 L46 6 M54 12 L46 18" 
+                  stroke="var(--color-primary)" 
+                  strokeWidth="3" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  strokeDasharray="8 6"
+                  className="animated-arrow-path"
+                />
+              </svg>
+              {/* Vertical SVG Arrow for mobile */}
+              <svg className="workflow-arrow-vertical" width="24" height="60" viewBox="0 0 24 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path 
+                  d="M12 0 V54 L6 46 M12 54 L18 46" 
+                  stroke="var(--color-primary)" 
+                  strokeWidth="3" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  strokeDasharray="8 6"
+                  className="animated-arrow-path-vertical"
+                />
+              </svg>
             </div>
 
             {/* Step 3 */}
-            <div className="timeline-step">
-              <div className="timeline-num">03</div>
-              <h3 className="timeline-step-title">Deliver & Grow Together</h3>
-              <p className="timeline-step-desc">
+            <div className="workflow-rect-card">
+              <span className="workflow-step-num">03</span>
+              <h3 className="workflow-card-title">Deliver & Grow Together</h3>
+              <span className="workflow-card-badge">Estate & Succession Planning</span>
+              <p className="workflow-card-desc">
                 We implement the plan, run compliance seamlessly, and meet regularly to track cash flow and optimization.
               </p>
-            </div>
-          </div>
-
-          {/* Strategic Chapters Plan details */}
-          <div id="chapters-section" className="process-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
-            <div className="process-card" style={styles.planBox}>
-              <div className="process-step-num" style={{ color: 'var(--theme-color-primary)' }}>01</div>
-              <h3 className="process-title" style={{ fontSize: '1.4rem' }}>Chapter One</h3>
-              <p style={{ fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-                Every great company starts with a spark. We help founders turn that spark into solid financial foundations — from registering your company and setting up cloud accounting to VAT filings.
-              </p>
-              
-              <ul style={styles.planSubList}>
-                <li>• Company Formation</li>
-                <li>• Bookkeeping</li>
-                <li>• Cloud Accounting</li>
-                <li>• VAT Returns</li>
-                <li>• Self-Assessment</li>
+              <div className="workflow-card-divider" />
+              <ul className="workflow-bullets">
+                <li>Succession & Will Planning</li>
+                <li>Trust Setup & Tax Planning</li>
+                <li>Inheritance Tax Minimisation</li>
               </ul>
-              
-              <div style={styles.planTag}>For Startups & New Ventures</div>
-              <p style={{ fontSize: '0.8rem', fontStyle: 'italic', marginBottom: '1.5rem' }}>
-                Building something from scratch is exhilarating — and chaotic. We keep the financial side structured.
-              </p>
-              <a href="#callback-form-section" onClick={scrollToCallback} className="btn btn-secondary-glass" style={{ width: '100%', padding: '0.55rem' }}>Explore startup services</a>
-            </div>
-
-            <div className="process-card" style={styles.planBox}>
-              <div className="process-step-num" style={{ color: 'var(--theme-color-primary)' }}>02</div>
-              <h3 className="process-title" style={{ fontSize: '1.4rem' }}>Chapter Two</h3>
-              <p style={{ fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-                As a growing SME, decisions get bigger — hiring, financing, tax planning. We become your strategic partner, working closely with owners to protect margins, minimise tax, and plan next steps.
-              </p>
-              
-              <ul style={styles.planSubList}>
-                <li>• Tax Advisory</li>
-                <li>• Payroll Bureau</li>
-                <li>• Business Valuations</li>
-                <li>• Company Restructuring</li>
-                <li>• Management Consulting</li>
-              </ul>
-              
-              <div style={styles.planTag}>For SMEs & Business Owners</div>
-              <p style={{ fontSize: '0.8rem', fontStyle: 'italic', marginBottom: '1.5rem' }}>
-                You've built something real. Now it's about protecting it, optimising it, and positioning it long term.
-              </p>
-              <a href="#callback-form-section" onClick={scrollToCallback} className="btn btn-secondary-glass" style={{ width: '100%', padding: '0.55rem' }}>Explore SME services</a>
-            </div>
-
-            <div className="process-card" style={styles.planBox}>
-              <div className="process-step-num" style={{ color: 'var(--theme-color-primary)' }}>03</div>
-              <h3 className="process-title" style={{ fontSize: '1.4rem' }}>Chapter Three</h3>
-              <p style={{ fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-                You've worked hard to build wealth. Our estate planning specialists ensure it passes to the right people with the least tax exposure, will writing, and trust setup.
-              </p>
-              
-              <ul style={styles.planSubList}>
-                <li>• Estate Planning</li>
-                <li>• Will Writing</li>
-                <li>• Succession Planning</li>
-                <li>• Trust Tax Planning</li>
-                <li>• Inheritance Tax</li>
-              </ul>
-              
-              <div style={styles.planTag}>Estate, Succession & Will Planning</div>
-              <p style={{ fontSize: '0.8rem', fontStyle: 'italic', marginBottom: '1.5rem' }}>
-                Your story deserves a proper ending. We help you write it — protecting your wealth and family's future.
-              </p>
-              <a href="#callback-form-section" onClick={scrollToCallback} className="btn btn-secondary-glass" style={{ width: '100%', padding: '0.55rem' }}>Explore legacy services</a>
             </div>
           </div>
         </div>
@@ -584,37 +632,50 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
       {/* 5. STATISTICS SECTION */}
       <section className="stats-section">
         <div className="stats-bg-overlay" />
-        <div className="container relative-z">
+        <motion.div 
+          className="container relative-z"
+          onViewportEnter={() => setStatsInView(true)}
+          onViewportLeave={() => setStatsInView(false)}
+          viewport={{ once: false, amount: 0.3 }}
+        >
           <div className="stats-grid">
             {/* Card 1 */}
             <div className="stats-card">
-              <p className="stats-number">5,000+</p>
+              <p className="stats-number">
+                <AnimatedCounter key={`${layoutModel}-${statsInView}-1`} value="5,000+" trigger={statsInView} />
+              </p>
               <div className="stats-divider" />
               <p className="stats-label">Businesses Supported</p>
             </div>
 
             {/* Card 2 */}
             <div className="stats-card">
-              <p className="stats-number">98%</p>
+              <p className="stats-number">
+                <AnimatedCounter key={`${layoutModel}-${statsInView}-2`} value="98%" trigger={statsInView} />
+              </p>
               <div className="stats-divider" />
               <p className="stats-label">Client Retention Rate</p>
             </div>
 
             {/* Card 3 */}
             <div className="stats-card">
-              <p className="stats-number">15+</p>
+              <p className="stats-number">
+                <AnimatedCounter key={`${layoutModel}-${statsInView}-3`} value="15+" trigger={statsInView} />
+              </p>
               <div className="stats-divider" />
               <p className="stats-label">Years in Business</p>
             </div>
 
             {/* Card 4 */}
             <div className="stats-card">
-              <p className="stats-number">50+</p>
+              <p className="stats-number">
+                <AnimatedCounter key={`${layoutModel}-${statsInView}-4`} value="50+" trigger={statsInView} />
+              </p>
               <div className="stats-divider" />
               <p className="stats-label">Expert Team Members</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* 6. SAVINGS CALCULATOR */}

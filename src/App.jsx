@@ -130,7 +130,7 @@ function App() {
       </header>
 
       {/* 3. DYNAMIC CONTENT AREA */}
-      <main className="container">
+      <main className={activeTab === 'landing' ? 'landing-main-wrapper' : 'container'}>
         {activeTab === 'landing' ? (
           <LandingPage 
             backendUrl={BACKEND_URL} 
