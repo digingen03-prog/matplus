@@ -482,14 +482,12 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 8. FINAL CALL TO ACTION */}
-      <section className="section" style={{ padding: '6rem 0', background: '#090d16', color: 'white', position: 'relative' }}>
-        <div style={{ absolute: 'absolute', inset: 0, opacity: 0.15, backgroundImage: "url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80')", backgroundSize: 'cover', backgroundPosition: 'center', pointerEvents: 'none' }} />
-        
-        <div className="container relative-z" style={{ textAlign: 'center', maxWidth: '750px', position: 'relative', zIndex: 5 }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'white', marginBottom: '1.25rem', lineHeight: '1.2' }}>
+      <section className="section bg-white" style={{ borderTop: '1px solid #e2e8f0' }}>
+        <div className="container" style={{ textAlign: 'center', maxWidth: '750px' }}>
+          <h2 className="section-title" style={{ fontWeight: 800, marginBottom: '1.25rem', lineHeight: '1.2' }}>
             Give Us A Go And Book A Free Initial Consultation
           </h2>
-          <p style={{ color: '#cbd5e1', fontSize: '1.05rem', lineHeight: '1.7', marginBottom: '2.5rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: '1.7', marginBottom: '2.5rem' }}>
             We're here to provide practical advice and long-term support for your business, wealth and family.
           </p>
           <a 
