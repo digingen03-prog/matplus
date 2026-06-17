@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
 import InheritanceTaxPlanning from './components/InheritanceTaxPlanning';
@@ -35,6 +36,20 @@ function App() {
       window.history.pushState = originalPushState;
     };
   }, []);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
 
   const navigateTo = (path) => {
     window.history.pushState({}, '', path);
@@ -86,7 +101,7 @@ function App() {
           </a>
 
           {/* Desktop Navigation (Centered) */}
-          <nav className="desktop-nav" style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+          <nav className="desktop-nav">
             <ul className="nav-links">
               <li 
                 className={`nav-item ${(activeTab === 'landing' && currentPath !== '/services/inheritance-tax-planning' && currentPath !== '/about-us' && currentPath !== '/contact') ? 'active' : ''}`}
@@ -175,41 +190,110 @@ function App() {
             className="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle navigation"
+            style={{ border: 'none', background: 'none', cursor: 'pointer', outline: 'none' }}
           >
-            {isMobileMenuOpen ? <FiX /> : <FiMenu />}
+            <motion.div
+              key={isMobileMenuOpen ? "open" : "closed"}
+              initial={{ rotate: -90, opacity: 0, scale: 0.8 }}
+              animate={{ rotate: 0, opacity: 1, scale: 1 }}
+              exit={{ rotate: 90, opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.3 }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', color: 'var(--color-secondary)' }}
+            >
+              {isMobileMenuOpen ? <FiX /> : <FiMenu />}
+            </motion.div>
           </button>
         </div>
+      </header>
 
-        {/* Mobile Slide-Down Navigation */}
+      {/* Mobile Slide-Down Navigation Drawer */}
+      <AnimatePresence>
         {isMobileMenuOpen && (
-          <div className="mobile-nav-overlay">
-            <ul className="mobile-nav-links">
-              <li className={`mobile-nav-item ${(activeTab === 'landing' && currentPath !== '/services/inheritance-tax-planning' && currentPath !== '/about-us' && currentPath !== '/contact') ? 'active' : ''}`} onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); }}>Home</li>
-              <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>Services</li>
-              <li className={`mobile-nav-item ${currentPath === '/about-us' ? 'active' : ''}`} onClick={() => { navigateTo('/about-us'); closeMobileMenu(); }}>About Us</li>
-              <li className={`mobile-nav-item ${currentPath === '/contact' ? 'active' : ''}`} onClick={() => { navigateTo('/contact'); closeMobileMenu(); }}>Contact</li>
-              <li className={`mobile-nav-item ${currentPath === '/services/inheritance-tax-planning' ? 'active' : ''}`} onClick={() => { navigateTo('/services/inheritance-tax-planning'); closeMobileMenu(); }}>Inheritance Tax Planning</li>
-              <li className="mobile-nav-item mobile-nav-divider">Layouts</li>
-              <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model1' ? 'active' : ''}`} onClick={() => { setLayoutModel('model1'); closeMobileMenu(); }}>⬛ Model 1 - Frost Glass</li>
-              <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model2' ? 'active' : ''}`} onClick={() => { setLayoutModel('model2'); closeMobileMenu(); }}>🏅 Model 2 - Golden Premium</li>
-              <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model3' ? 'active' : ''}`} onClick={() => { setLayoutModel('model3'); closeMobileMenu(); }}>🌊 Model 3 - Ocean Blue</li>
-              <li style={{ padding: '0.75rem 1.5rem' }}>
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="mobile-nav-overlay"
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(15, 23, 42, 0.98)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              zIndex: 999,
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '6rem 2rem 2.5rem',
+              overflowY: 'auto'
+            }}
+          >
+            <ul className="mobile-nav-links" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', listStyle: 'none', padding: 0, margin: '0 auto', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+              <li 
+                style={{ fontSize: '1.35rem', fontWeight: 700, color: 'white', cursor: 'pointer', padding: '0.4rem 0' }} 
+                onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); }}
+              >
+                Home
+              </li>
+              <li 
+                style={{ fontSize: '1.35rem', fontWeight: 700, color: currentPath === '/about-us' ? 'var(--color-primary)' : 'white', cursor: 'pointer', padding: '0.4rem 0' }} 
+                onClick={() => { navigateTo('/about-us'); closeMobileMenu(); }}
+              >
+                About Us
+              </li>
+              
+              {/* Services Group */}
+              <li style={{ padding: '0.4rem 0' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '0.75rem' }}>Services</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  <div 
+                    style={{ fontSize: '1.15rem', fontWeight: 650, color: currentPath === '/services/inheritance-tax-planning' ? 'var(--color-primary)' : '#cbd5e1', cursor: 'pointer' }}
+                    onClick={() => { navigateTo('/services/inheritance-tax-planning'); closeMobileMenu(); }}
+                  >
+                    Inheritance Tax Planning
+                  </div>
+                  <div 
+                    style={{ fontSize: '1.15rem', fontWeight: 650, color: '#cbd5e1', cursor: 'pointer' }}
+                    onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); setTimeout(() => document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' }), 200); }}
+                  >
+                    Estate Planning
+                  </div>
+                  <div 
+                    style={{ fontSize: '1.15rem', fontWeight: 650, color: '#cbd5e1', cursor: 'pointer' }}
+                    onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); setTimeout(() => document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' }), 200); }}
+                  >
+                    Wills & Probate
+                  </div>
+                </div>
+              </li>
+
+              <li 
+                style={{ fontSize: '1.35rem', fontWeight: 700, color: currentPath === '/contact' ? 'var(--color-primary)' : 'white', cursor: 'pointer', padding: '0.4rem 0' }} 
+                onClick={() => { navigateTo('/contact'); closeMobileMenu(); }}
+              >
+                Contact Us
+              </li>
+
+              <li style={{ padding: '1.5rem 0 0' }}>
                 <a 
                   href="#join-form" 
                   className="btn btn-primary" 
-                  style={{ width: '100%', textAlign: 'center', display: 'block' }}
+                  style={{ width: '100%', padding: '1.1rem', borderRadius: '50px', textAlign: 'center', display: 'block', fontSize: '1.1rem', fontWeight: 700 }}
                   onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}
                 >
-                  Book a Free Consultation
+                  Book Consultation
                 </a>
               </li>
             </ul>
-          </div>
+          </motion.div>
         )}
-      </header>
+      </AnimatePresence>
 
       {/* 3. DYNAMIC CONTENT AREA */}
-      <main className={(activeTab === 'landing' || currentPath === '/services/inheritance-tax-planning' || currentPath === '/about-us' || currentPath === '/contact') ? 'landing-main-wrapper' : 'container'}>
+      <main className={`main-content ${(activeTab === 'landing' || currentPath === '/services/inheritance-tax-planning' || currentPath === '/about-us' || currentPath === '/contact') ? 'landing-main-wrapper' : 'container'}`}>
         {currentPath === '/services/inheritance-tax-planning' ? (
           <InheritanceTaxPlanning 
             backendUrl={BACKEND_URL}
@@ -246,13 +330,13 @@ function App() {
         <div className="container">
           <div className="footer-top-grid">
             <div>
-              <div style={{ display: 'inline-block', background: 'white', borderRadius: '10px', padding: '8px 14px', marginBottom: '1.25rem' }}>
+              <div className="footer-logo-wrap" style={{ display: 'inline-block', background: 'white', borderRadius: '10px', padding: '8px 14px', marginBottom: '1.25rem' }}>
                 <img src="/matplus-logo.png" alt="MATPLUS+ Chartered Accountants" style={{ height: '50px', width: 'auto', objectFit: 'contain', display: 'block' }} />
               </div>
               <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                 Providing smart financial solutions, proactive tax advice, and business structures for clients across Australia.
               </p>
-              <div style={{ display: 'flex', gap: '1.25rem', fontSize: '1.2rem', color: '#94a3b8' }}>
+              <div className="footer-socials" style={{ display: 'flex', gap: '1.25rem', fontSize: '1.2rem', color: '#94a3b8' }}>
                 <a href="#" className="footer-link-a" style={{ display: 'flex' }}><FaLinkedin /></a>
                 <a href="#" className="footer-link-a" style={{ display: 'flex' }}><FaFacebook /></a>
                 <a href="#" className="footer-link-a" style={{ display: 'flex' }}><FaTwitter /></a>

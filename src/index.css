@@ -191,10 +191,11 @@ p {
   color: white;
 }
 
-/* Sticky Navbar overrides */
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(12px);
@@ -235,6 +236,8 @@ p {
 .desktop-nav {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-grow: 1;
 }
 
 .nav-links {
@@ -412,6 +415,10 @@ p {
   padding-left: 2.25rem;
   font-size: 0.875rem;
   font-weight: 500;
+}
+
+.main-content {
+  padding-top: 82px; /* Offset fixed header */
 }
 
 /* Landing page full-width wrapper */
@@ -2391,11 +2398,10 @@ p {
   }
   .hero-grid-layout {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 3rem;
   }
-  /* Hide the callback form card on mobile */
   .hero-right-col {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -2510,18 +2516,37 @@ p {
 }
 
 /* === FOOTER === */
+@media (max-width: 992px) {
+  .footer-top-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .footer {
     padding: 3rem 0 1.5rem;
   }
   .footer-top-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    text-align: center;
     gap: 2rem;
     margin-bottom: 2.5rem;
   }
+  .footer-logo-wrap {
+    margin: 0 auto 1.25rem auto !important;
+    display: inline-block !important;
+  }
+  .footer-socials {
+    justify-content: center;
+  }
+  .footer-links-list li {
+    justify-content: center;
+  }
   .footer-bottom-flex {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     gap: 0.75rem;
     font-size: 0.8rem;
   }
@@ -2548,5 +2573,117 @@ p {
   }
   .calculator-card {
     padding: 1.25rem;
+  }
+}
+
+/* ========================================================
+   MATPLUS AUDITED STYLES FOR PREMIUM RESPONSIVENESS & UI/UX
+   ======================================================== */
+
+/* Equal Height Grids */
+.benefits-grid,
+.blogs-grid,
+.booklets-grid,
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: stretch;
+}
+
+.benefit-card,
+.blog-card,
+.booklet-card,
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Button & Input optimization */
+.form-control,
+.form-control-hero,
+.calc-select {
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus,
+.form-control-hero:focus {
+  transform: translateY(-1px);
+}
+
+/* Hover Lift Effect */
+.benefit-card,
+.blog-card,
+.booklet-card,
+.faq-item,
+.trust-badge-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.benefit-card:hover,
+.blog-card:hover,
+.booklet-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* Mobile & Tablet Overrides */
+@media (max-width: 900px) {
+  .hero-title {
+    font-size: 48px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Forms */
+  .form-control,
+  .form-control-hero,
+  .calc-select {
+    min-height: 52px !important;
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+  
+  .btn,
+  .btn-primary-gradient,
+  .btn-secondary-glass {
+    width: 100%;
+    min-height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Hero headers */
+  .hero-title {
+    font-size: 36px !important;
+  }
+  
+  /* Prevent horizontal scroll */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  /* Card layouts */
+  .benefits-grid,
+  .blogs-grid,
+  .booklets-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 414px) {
+  .hero-title {
+    font-size: 30px !important;
+  }
+  
+  .section-title {
+    font-size: 24px !important;
+  }
+  
+  /* Reduce padding on mobile */
+  .section {
+    padding: 3rem 0 !important;
   }
 }
