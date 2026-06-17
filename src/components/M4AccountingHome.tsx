@@ -168,6 +168,8 @@ export default function M4AccountingHome() {
     );
   };
 
+
+
   // Callback Form State
   const [callbackForm, setCallbackForm] = useState({
     name: '',
@@ -278,7 +280,7 @@ export default function M4AccountingHome() {
           </a>
 
           {/* Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-8 font-semibold text-slate-600 text-sm">
+          <nav className="hidden lg:flex items-center gap-8 font-semibold text-slate-600 text-sm relative">
             <a href="#" className="text-slate-950 hover:text-[#E31E24] transition-colors duration-200">Home</a>
             <a href="#services" className="hover:text-[#E31E24] transition-colors duration-200">Services</a>
             <a href="#why-choose-us" className="hover:text-[#E31E24] transition-colors duration-200">Industries</a>

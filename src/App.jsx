@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
+import InheritanceTaxPlanning from './components/InheritanceTaxPlanning';
+import AboutUs from './components/AboutUs';
+import ContactUs from './components/ContactUs';
 import { FiPhone, FiMail, FiMapPin, FiMenu, FiX } from 'react-icons/fi';
 import { FaLinkedin, FaFacebook, FaTwitter } from 'react-icons/fa';
 
@@ -10,12 +13,36 @@ function App() {
   const [activeTab, setActiveTab] = useState('landing');
   const [layoutModel, setLayoutModel] = useState('model1');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handleLocationChange);
+    
+    const originalPushState = window.history.pushState;
+    window.history.pushState = function () {
+      originalPushState.apply(this, arguments);
+      handleLocationChange();
+    };
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.history.pushState = originalPushState;
+    };
+  }, []);
+
+  const navigateTo = (path) => {
+    window.history.pushState({}, '', path);
+  };
 
   const handleConsultationClick = (e) => {
     e.preventDefault();
+    navigateTo('/');
     if (activeTab !== 'landing') {
       setActiveTab('landing');
       setTimeout(() => {
@@ -50,7 +77,7 @@ function App() {
       {/* 2. MAIN NAVIGATION HEADER */}
       <header className="navbar">
         <div className="container navbar-flex">
-          <a href="#" className="logo" onClick={(e) => { e.preventDefault(); setActiveTab('landing'); closeMobileMenu(); }}>
+          <a href="#" className="logo" onClick={(e) => { e.preventDefault(); navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); }}>
             <img 
               src="/matplus-logo.png" 
               alt="MATPLUS+ Chartered Accountants" 
@@ -58,18 +85,46 @@ function App() {
             />
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="desktop-nav">
+          {/* Desktop Navigation (Centered) */}
+          <nav className="desktop-nav" style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
             <ul className="nav-links">
               <li 
-                className={`nav-item ${activeTab === 'landing' ? 'active' : ''}`}
-                onClick={() => setActiveTab('landing')}
+                className={`nav-item ${(activeTab === 'landing' && currentPath !== '/services/inheritance-tax-planning' && currentPath !== '/about-us' && currentPath !== '/contact') ? 'active' : ''}`}
+                onClick={() => { navigateTo('/'); setActiveTab('landing'); }}
               >
                 Home
               </li>
-              <li className="nav-item" onClick={handleConsultationClick}>Services</li>
-              <li className="nav-item" onClick={handleConsultationClick}>Industries</li>
-              <li className="nav-item" onClick={handleConsultationClick}>About Us</li>
+              {/* Services Dropdown */}
+              <li className="nav-item dropdown-layouts" style={{ position: 'relative' }}>
+                <div 
+                  className="dropdown-trigger"
+                  onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
+                >
+                  Services <span style={{ fontSize: '0.65rem' }}>▼</span>
+                </div>
+                {isServicesDropdownOpen && (
+                  <ul className="dropdown-menu">
+                    <li 
+                      className={`dropdown-item ${currentPath === '/services/inheritance-tax-planning' ? 'active-model' : ''}`}
+                      onClick={() => { navigateTo('/services/inheritance-tax-planning'); setIsServicesDropdownOpen(false); }}
+                    >
+                      Inheritance Tax Planning
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li 
+                className={`nav-item ${currentPath === '/about-us' ? 'active' : ''}`}
+                onClick={() => navigateTo('/about-us')}
+              >
+                About Us
+              </li>
+              <li 
+                className={`nav-item ${currentPath === '/contact' ? 'active' : ''}`}
+                onClick={() => navigateTo('/contact')}
+              >
+                Contact
+              </li>
               
               {/* Layout Dropdown trigger */}
               <li className="nav-item dropdown-layouts">
@@ -102,18 +157,18 @@ function App() {
                   </ul>
                 )}
               </li>
-
-              <li>
-                <a 
-                  href="#join-form" 
-                  className="btn btn-primary navbar-cta-btn"
-                  onClick={handleConsultationClick}
-                >
-                  Book a Free Consultation
-                </a>
-              </li>
             </ul>
           </nav>
+
+          <div className="desktop-nav-cta">
+            <a 
+              href="#join-form" 
+              className="btn btn-primary navbar-cta-btn"
+              onClick={handleConsultationClick}
+            >
+              Book a Free Consultation
+            </a>
+          </div>
 
           {/* Hamburger Button (Mobile Only) */}
           <button 
@@ -129,10 +184,11 @@ function App() {
         {isMobileMenuOpen && (
           <div className="mobile-nav-overlay">
             <ul className="mobile-nav-links">
-              <li className={`mobile-nav-item ${activeTab === 'landing' ? 'active' : ''}`} onClick={() => { setActiveTab('landing'); closeMobileMenu(); }}>Home</li>
+              <li className={`mobile-nav-item ${(activeTab === 'landing' && currentPath !== '/services/inheritance-tax-planning' && currentPath !== '/about-us' && currentPath !== '/contact') ? 'active' : ''}`} onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); }}>Home</li>
               <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>Services</li>
-              <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>Industries</li>
-              <li className="mobile-nav-item" onClick={() => { handleConsultationClick({ preventDefault: () => {} }); closeMobileMenu(); }}>About Us</li>
+              <li className={`mobile-nav-item ${currentPath === '/about-us' ? 'active' : ''}`} onClick={() => { navigateTo('/about-us'); closeMobileMenu(); }}>About Us</li>
+              <li className={`mobile-nav-item ${currentPath === '/contact' ? 'active' : ''}`} onClick={() => { navigateTo('/contact'); closeMobileMenu(); }}>Contact</li>
+              <li className={`mobile-nav-item ${currentPath === '/services/inheritance-tax-planning' ? 'active' : ''}`} onClick={() => { navigateTo('/services/inheritance-tax-planning'); closeMobileMenu(); }}>Inheritance Tax Planning</li>
               <li className="mobile-nav-item mobile-nav-divider">Layouts</li>
               <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model1' ? 'active' : ''}`} onClick={() => { setLayoutModel('model1'); closeMobileMenu(); }}>⬛ Model 1 - Frost Glass</li>
               <li className={`mobile-nav-item mobile-nav-sub ${layoutModel === 'model2' ? 'active' : ''}`} onClick={() => { setLayoutModel('model2'); closeMobileMenu(); }}>🏅 Model 2 - Golden Premium</li>
@@ -153,8 +209,26 @@ function App() {
       </header>
 
       {/* 3. DYNAMIC CONTENT AREA */}
-      <main className={activeTab === 'landing' ? 'landing-main-wrapper' : 'container'}>
-        {activeTab === 'landing' ? (
+      <main className={(activeTab === 'landing' || currentPath === '/services/inheritance-tax-planning' || currentPath === '/about-us' || currentPath === '/contact') ? 'landing-main-wrapper' : 'container'}>
+        {currentPath === '/services/inheritance-tax-planning' ? (
+          <InheritanceTaxPlanning 
+            backendUrl={BACKEND_URL}
+            onLeadSubmitted={() => {
+              console.log('Inquiry submitted, database sync complete.');
+            }}
+          />
+        ) : currentPath === '/about-us' ? (
+          <AboutUs 
+            handleConsultationClick={handleConsultationClick}
+          />
+        ) : currentPath === '/contact' ? (
+          <ContactUs 
+            backendUrl={BACKEND_URL}
+            onLeadSubmitted={() => {
+              console.log('Inquiry submitted, database sync complete.');
+            }}
+          />
+        ) : activeTab === 'landing' ? (
           <LandingPage 
             backendUrl={BACKEND_URL} 
             layoutModel={layoutModel}
@@ -188,6 +262,7 @@ function App() {
             <div>
               <h4 className="footer-col-title">Services</h4>
               <ul className="footer-links-list">
+                <li><a href="#" className="footer-link-a" onClick={(e) => { e.preventDefault(); navigateTo('/services/inheritance-tax-planning'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Inheritance Tax Planning</a></li>
                 <li><a href="#" className="footer-link-a">Taxation & Compliance</a></li>
                 <li><a href="#" className="footer-link-a">Accounting Advisory</a></li>
                 <li><a href="#" className="footer-link-a">Business Growth Advice</a></li>

@@ -316,7 +316,10 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
                     <a href="#callback-form-section" onClick={scrollToCallback} className="btn btn-primary-gradient">
                       {slides[currentSlide].btnText}
                     </a>
-                    <a href="#chapters-section" className="btn btn-secondary-glass">
+                    <a 
+                      href="#chapters-section" 
+                      className="btn btn-secondary-glass"
+                    >
                       Learn More
                     </a>
                   </div>
