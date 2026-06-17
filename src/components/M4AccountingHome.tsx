@@ -113,6 +113,61 @@ const staggerContainer = {
 };
 
 export default function M4AccountingHome() {
+  // Hero Slider Data
+  const heroSlides = [
+    {
+      title: "From Compliance Accounting",
+      subtitle: "Helping businesses stay compliant with confidence through expert accounting, taxation and financial reporting services tailored for sustainable growth.",
+      badge: "Enterprise Financial Advisory",
+      image: "/Compliance Accounting Image.webp",
+      highlight: "Compliance Accounting"
+    },
+    {
+      title: "Estate Planning and Wills",
+      subtitle: "Protecting family wealth and ensuring a smooth transfer of assets to future generations through strategic estate planning and tax-effective solutions.",
+      badge: "Wealth Protection & Transfer",
+      image: "/Estate Planning and Wealth Transfer Image.webp",
+      highlight: "Estate Planning and Wills"
+    },
+    {
+      title: "From Construction Workers",
+      subtitle: "Supporting builders, contractors and tradies with industry-specific accounting, payroll, taxation and business advisory services.",
+      badge: "Industry-Specific Accounting",
+      image: "/Construction Industry Image.webp",
+      highlight: "Construction Workers"
+    },
+    {
+      title: "Women Entrepreneurs",
+      subtitle: "Empowering ambitious women business owners with strategic financial guidance, business growth solutions and long-term wealth creation expertise.",
+      badge: "Empowering Women in Business",
+      image: "/Women Business Owner Image.webp",
+      highlight: "Women Entrepreneurs"
+    }
+  ];
+
+  const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+
+  // Auto-slide every 5.5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHeroSlide(prev => (prev + 1) % heroSlides.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
+
+  const renderHeroTitle = (title: string, highlight: string) => {
+    if (!highlight) return title;
+    const regex = new RegExp(`(${highlight})`, 'gi');
+    const parts = title.split(regex);
+    return parts.map((part, index) => 
+      part.toLowerCase() === highlight.toLowerCase() ? (
+        <span key={index} className="text-[#E31E24]">{part}</span>
+      ) : (
+        part
+      )
+    );
+  };
+
   // Callback Form State
   const [callbackForm, setCallbackForm] = useState({
     name: '',
@@ -121,7 +176,7 @@ export default function M4AccountingHome() {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const handleCallbackSubmit = (e) => {
+  const handleCallbackSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!callbackForm.name || !callbackForm.phone) return;
     setFormSubmitted(true);
@@ -162,9 +217,9 @@ export default function M4AccountingHome() {
   }, [turnover, structure, currentSpend]);
 
   // Accordion active state
-  const [activeFaq, setActiveFaq] = useState(null);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const toggleFaq = (index) => {
+  const toggleFaq = (index: number) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
 
@@ -251,37 +306,59 @@ export default function M4AccountingHome() {
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Hero Left Content */}
-          <div className="lg:col-span-7 space-y-8">
-            <div className="inline-flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-1.5 text-xs font-semibold text-[#E31E24]">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-              </span>
-              Enterprise Financial Advisory
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.08]">
-              Your Trusted Partner <br />
-              in <span className="text-[#E31E24]">Accounting</span>
-            </h1>
-            
-            <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-              Smart financial solutions, proactive advice, and customized support engineered to help your business achieve long-term growth and tax optimization.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#join-form" 
-                className="bg-[#E31E24] text-white hover:bg-[#C2141A] font-bold text-center px-8 py-4 rounded-lg shadow-xl hover:shadow-red-500/20 transform hover:-translate-y-0.5 transition-all duration-200"
+          <div className="lg:col-span-7 space-y-8 flex flex-col justify-center min-h-[460px]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentHeroSlide}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="space-y-8"
               >
-                Book Free Consultation
-              </a>
-              <a 
-                href="#services" 
-                className="bg-white text-slate-900 border border-slate-200 hover:border-slate-400 font-bold text-center px-8 py-4 rounded-lg shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200"
-              >
-                View Our Services
-              </a>
+                <div className="inline-flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-1.5 text-xs font-semibold text-[#E31E24]">
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                  </span>
+                  {heroSlides[currentHeroSlide].badge}
+                </div>
+                
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 tracking-tight leading-[1.08] min-h-[2.5em] lg:min-h-[2.2em]">
+                  {renderHeroTitle(heroSlides[currentHeroSlide].title, heroSlides[currentHeroSlide].highlight)}
+                </h1>
+                
+                <p className="text-lg text-slate-600 max-w-xl leading-relaxed min-h-[4.5em]">
+                  {heroSlides[currentHeroSlide].subtitle}
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a 
+                    href="#join-form" 
+                    className="bg-[#E31E24] text-white hover:bg-[#C2141A] font-bold text-center px-8 py-4 rounded-lg shadow-xl hover:shadow-red-500/20 transform hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    Book Free Consultation
+                  </a>
+                  <a 
+                    href="#services" 
+                    className="bg-white text-slate-900 border border-slate-200 hover:border-slate-400 font-bold text-center px-8 py-4 rounded-lg shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    View Our Services
+                  </a>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Slide Navigation Dots */}
+            <div className="flex items-center gap-2.5 pt-2">
+              {heroSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentHeroSlide(idx)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentHeroSlide ? 'bg-[#E31E24] w-6' : 'bg-slate-350 hover:bg-slate-400 w-2.5'}`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
             </div>
 
             {/* Trust Badges */}
@@ -374,13 +451,20 @@ export default function M4AccountingHome() {
             </div>
 
             {/* Overlapping small visual image */}
-            <div className="mt-8 relative h-48 rounded-[20px] overflow-hidden shadow-lg border border-slate-200">
-              <img 
-                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80" 
-                alt="Corporate advisory meeting" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+            <div className="mt-8 relative h-48 rounded-[20px] overflow-hidden shadow-lg border border-slate-200 bg-slate-100">
+              <AnimatePresence mode="wait">
+                <motion.img 
+                  key={currentHeroSlide}
+                  src={heroSlides[currentHeroSlide].image} 
+                  alt={heroSlides[currentHeroSlide].title} 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-full h-full object-cover absolute inset-0"
+                />
+              </AnimatePresence>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
             </div>
           </div>
         </div>

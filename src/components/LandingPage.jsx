@@ -62,28 +62,36 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
   // 1. Hero Slideshow State
   const slides = [
     {
-      title: "MpowerHer+",
-      subtitle: "Empowering female-led startups and entrepreneurs. Get all-encompassed accounting support, capital funding advisory, and business scaling guidance built for your success.",
-      btnText: "Enquire Today",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1600&q=80",
-      badge: "🚀 Women Entrepreneurs",
-      highlight: ""
+      title: "From Compliance Accounting",
+      subtitle: "Helping businesses stay compliant with confidence through expert accounting, taxation and financial reporting services tailored for sustainable growth.",
+      btnText: "Enquire Now",
+      image: "/Compliance Accounting Image.webp",
+      badge: "📋 Compliance Accounting",
+      highlight: "Compliance Accounting"
     },
     {
-      title: "Thinking about Inheritance Tax?",
-      subtitle: "Protect what you have worked a lifetime to build. Start your custom estate and succession planning journey today with our MATPLUS trust specialists.",
+      title: "Estate Planning and Wills",
+      subtitle: "Protecting family wealth and ensuring a smooth transfer of assets to future generations through strategic estate planning and tax-effective solutions.",
       btnText: "Enquire Now",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80",
+      image: "/Estate Planning and Wealth Transfer Image.webp",
       badge: "🏡 Estate Planning",
-      highlight: "Inheritance Tax"
+      highlight: "Estate Planning and Wills"
     },
     {
-      title: "Tax refunds for Construction Workers?",
-      subtitle: "Claim your average £2,800 CIS rebate. Speak to our specialist tax refund team now to secure your cash refund in under 10 days!",
+      title: "From Construction Workers",
+      subtitle: "Supporting builders, contractors and tradies with industry-specific accounting, payroll, taxation and business advisory services.",
       btnText: "Enquire Now",
-      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=80",
+      image: "/Construction Industry Image.webp",
       badge: "🏗 Construction Specialists",
-      highlight: "Tax refunds"
+      highlight: "Construction Workers"
+    },
+    {
+      title: "Women Entrepreneurs",
+      subtitle: "Empowering ambitious women business owners with strategic financial guidance, business growth solutions and long-term wealth creation expertise.",
+      btnText: "Enquire Today",
+      image: "/Women Business Owner Image.webp",
+      badge: "🚀 Women Entrepreneurs",
+      highlight: "Women Entrepreneurs"
     }
   ];
   
@@ -92,7 +100,7 @@ export default function LandingPage({ onLeadSubmitted, backendUrl, layoutModel }
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % slides.length);
-    }, 6500);
+    }, 5500);
     return () => clearInterval(timer);
   }, [slides.length]);
 
