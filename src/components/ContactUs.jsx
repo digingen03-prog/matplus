@@ -117,23 +117,23 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
     <div className="animate-fade-in text-slate-800" style={{ paddingBottom: '3rem' }}>
       
       {/* 1. HERO SECTION */}
-      <section className="hero-slider-container" style={{ height: 'auto', minHeight: '580px', padding: '5.5rem 0', background: '#090d16' }}>
+      <section className="contact-hero-section">
         <div className="hero-slide-overlay" style={{ background: 'linear-gradient(135deg, rgba(9, 13, 22, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%)' }} />
         
         <div className="container relative-z" style={{ zIndex: 10, position: 'relative' }}>
-          <div className="hero-grid-layout" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+          <div className="contact-hero-grid">
             
             {/* Left side: Value props */}
             <div style={{ color: 'white' }}>
               <span className="section-badge" style={{ color: '#ff4d4d', fontWeight: 700 }}>Get in Touch</span>
-              <h1 className="hero-title" style={{ fontSize: '2.5rem', lineHeight: '1.2', color: 'white', marginTop: '0.5rem', marginBottom: '1.5rem', fontWeight: 800 }}>
+              <h1 className="contact-hero-title">
                 Let's Start The Conversation
               </h1>
               <p style={{ color: '#cbd5e1', fontSize: '1.05rem', lineHeight: '1.7', marginBottom: '2rem' }}>
                 Whether you need accounting support, tax planning, estate planning, wills, probate services or business advice, our team is here to help. We believe in providing clear, proactive and personalised advice tailored to your goals.
               </p>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2.5rem' }}>
+              <div className="hero-bullet-grid">
                 {[
                   "Free Initial Consultation",
                   "Personalised Advice",
@@ -161,13 +161,13 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
             </div>
 
             {/* Right side: Meeting Image */}
-            <div style={{ position: 'relative', height: '360px', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}>
+            <div className="contact-hero-image-wrap">
               <img 
                 src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=800&q=80" 
                 alt="Matplus office client meeting" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
-              <div style={{ absolute: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(9,13,22,0.4), transparent)' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(9,13,22,0.4), transparent)' }} />
             </div>
 
           </div>
@@ -175,7 +175,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 2. CONTACT INFORMATION GRID */}
-      <section className="section bg-white" style={{ padding: '5rem 0' }}>
+      <section className="section bg-white">
         <div className="container">
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <span className="section-badge">Contact Details</span>
@@ -230,9 +230,9 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 3. SEND US A MESSAGE (DETAILED CONSULTATION FORM) */}
-      <section id="message-form-section" className="section" style={{ background: '#f8fafc', padding: '5rem 0', borderTop: '1px solid #e2e8f0' }}>
+      <section id="message-form-section" className="section" style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
         <div className="container" style={{ maxWidth: '700px' }}>
-          <div className="callback-card" style={{ background: 'white', border: '1px solid #cbd5e1', boxShadow: '0 20px 50px rgba(0,0,0,0.06)', borderRadius: '20px', padding: '3rem' }}>
+          <div className="callback-card-responsive">
             <h3 className="callback-title" style={{ textAlign: 'center', fontSize: '1.75rem', fontWeight: 800, color: '#090d16', marginBottom: '0.25rem' }}>
               Request A Free Consultation
             </h3>
@@ -253,7 +253,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
                 </div>
               )}
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div className="form-grid">
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label">First Name *</label>
                   <input 
@@ -305,7 +305,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div className="form-grid">
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label">Service Required</label>
                   <select 
@@ -368,7 +368,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 4. WHY CLIENTS CHOOSE MATPLUS */}
-      <section className="section bg-white" style={{ padding: '5rem 0' }}>
+      <section className="section bg-white">
         <div className="container">
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <span className="section-badge">Our Commitment</span>
@@ -395,7 +395,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 5. SERVICES WE CAN HELP WITH */}
-      <section className="section" style={{ background: '#f8fafc', padding: '5rem 0' }}>
+      <section className="section" style={{ background: '#f8fafc' }}>
         <div className="container">
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
             <span className="section-badge">Services</span>
@@ -426,7 +426,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 6. FAQ ACCORDION SECTION */}
-      <section className="section bg-white" style={{ padding: '5rem 0' }}>
+      <section className="section bg-white">
         <div className="container" style={{ maxWidth: '800px' }}>
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <span className="section-badge">FAQ</span>
@@ -459,7 +459,7 @@ export default function ContactUs({ backendUrl, onLeadSubmitted }) {
       </section>
 
       {/* 7. MAP SECTION */}
-      <section className="section" style={{ background: '#f8fafc', padding: '5rem 0', borderTop: '1px solid #e2e8f0' }}>
+      <section className="section" style={{ background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <span className="section-badge">Our Office</span>
           <h2 className="section-title" style={{ fontWeight: 800, marginBottom: '0.5rem' }}>Serving Clients Across The United Kingdom</h2>

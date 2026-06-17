@@ -255,18 +255,6 @@ function App() {
                   >
                     Inheritance Tax Planning
                   </div>
-                  <div 
-                    style={{ fontSize: '1.15rem', fontWeight: 650, color: '#cbd5e1', cursor: 'pointer' }}
-                    onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); setTimeout(() => document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' }), 200); }}
-                  >
-                    Estate Planning
-                  </div>
-                  <div 
-                    style={{ fontSize: '1.15rem', fontWeight: 650, color: '#cbd5e1', cursor: 'pointer' }}
-                    onClick={() => { navigateTo('/'); setActiveTab('landing'); closeMobileMenu(); setTimeout(() => document.getElementById('join-form')?.scrollIntoView({ behavior: 'smooth' }), 200); }}
-                  >
-                    Wills & Probate
-                  </div>
                 </div>
               </li>
 
